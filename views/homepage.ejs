@@ -1,0 +1,21 @@
+<div class="container" ng-app="roomApp" ng-controller="roomController">
+  <div class="jumbotron">
+    <h1 class="text-center">The Room of Wonder</h1>
+  </div>
+  <div class="text-center">
+    <div class="btn-group" role="group">
+      <a class="btn btn-primary btn-lg" ng-click="join()" role="button" style="margin: 10px;">Join Room</a>
+      <a class="btn btn-danger btn-lg" ng-click="leave()" role="button" style="margin: 10px;">Leave Room</a>
+      <a class="btn btn-success btn-lg" ng-click="sendMessage()" role="button" style="margin: 10px;">Broadcast Message</a>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading text-center"><h4>Incoming Messages<h4></div>
+      <div class="panel-body">
+        <div ng-repeat="message in messages track by $index" >
+          {{message}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
