@@ -13,10 +13,11 @@ angular.module('roomApp').controller('roomController', ['$scope', '$http', funct
 */
 
   $scope.messages = [];
+  $scope.loading = false;
+  $scope.joined = false;
 
   // Handle socket events that are fired when a new chat message is sent.
   io.socket.on('message', function (e) {
-    console.log("hi");
 
     $scope.messages.push(e.msg);
 
@@ -37,29 +38,48 @@ angular.module('roomApp').controller('roomController', ['$scope', '$http', funct
 
   $scope.join = function() {
 
-    io.socket.get('/room/join', function(data, jwr){
+    $scope.loading = true;
+
+    io.socket.post('/room/join', {
+      username: $scope.username
+    }, function (data, jwr){
 
       if (jwr.statusCode !== 200) {
         console.error(JWR);
         return;
       }
+
+      $scope.joined = true;
+      $scope.loading = false;
+      $scope.$apply();
     });
+
   };
 
   $scope.leave = function() {
 
-    io.socket.get('/room/leave', function(data, jwr){
+    $scope.loading = true;
+
+    io.socket.delete('/room/leave', function (data, jwr){
 
       if (jwr.statusCode !== 200) {
         console.error(JWR);
         return;
       }
+
+      var msg= $scope.username || 'anonymous' + ' left the room!';
+      $scope.messages.push(msg);
+      $scope.username = '';
+      $scope.joined = false;
+      $scope.loading = false;
+      $scope.$apply();
     });
+
   };
 
   $scope.sendMessage = function() {
 
-    io.socket.get('/room/sendMessage', function(data, jwr){
+    io.socket.post('/room/sendMessage', function(data, jwr){
 
       if (jwr.statusCode !== 200) {
         console.error(JWR);

@@ -3,10 +3,15 @@
     <h1 class="text-center">The Room of Wonder</h1>
   </div>
   <div class="text-center">
+    <div>
+      <input autofocus style="font-size: 1.5em" ng-model="username" name="name" type="text" placeholder="...your name."/>
+    </div>
     <div class="btn-group" role="group">
-      <a class="btn btn-primary btn-lg" ng-click="join()" role="button" style="margin: 10px;">Join Room</a>
-      <a class="btn btn-danger btn-lg" ng-click="leave()" role="button" style="margin: 10px;">Leave Room</a>
-      <a class="btn btn-success btn-lg" ng-click="sendMessage()" role="button" style="margin: 10px;">Broadcast Message</a>
+      <a ng-disabled="loading || joined" class="btn btn-primary btn-lg" ng-click="join()" role="button" style="margin: 10px;">Join Room</a>
+      <a ng-disabled="loading || !joined" class="btn btn-danger btn-lg" ng-click="leave()" role="button" style="margin: 10px;">Leave Room</a>
+    </div>
+    <div>
+      <a ng-disabled="loading" class="btn btn-success btn-lg" ng-click="sendMessage()" role="button" style="margin: 10px;">Broadcast Message</a>
     </div>
   </div>
   <div class="panel panel-default">
