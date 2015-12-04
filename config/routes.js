@@ -34,7 +34,11 @@ module.exports.routes = {
 
   '/': {
     view: 'homepage'
-  }
+  },
+
+  'PUT /room/join': 'RoomController.join',
+  'DELETE /room/leave': 'RoomController.leave',
+  'PUT /room/send-message': 'RoomController.sendMessage'
 
   /***************************************************************************
   *                                                                          *

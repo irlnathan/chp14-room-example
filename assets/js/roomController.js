@@ -12,9 +12,10 @@ angular.module('roomApp').controller('roomController', ['$scope', '$http', funct
                                                   
 */
 
+  // Setup initial properties
   $scope.messages = [];
   $scope.loading = false;
-  $scope.joined = false;
+  $scope.joinedRoom = false;
 
   // Handle socket events that are fired when a new chat message is sent.
   io.socket.on('message', function (e) {
@@ -40,7 +41,7 @@ angular.module('roomApp').controller('roomController', ['$scope', '$http', funct
 
     $scope.loading = true;
 
-    io.socket.post('/room/join', {
+    io.socket.put('/room/join', {
       username: $scope.username
     }, function (data, jwr){
 
@@ -49,7 +50,7 @@ angular.module('roomApp').controller('roomController', ['$scope', '$http', funct
         return;
       }
 
-      $scope.joined = true;
+      $scope.joinedRoom = true;
       $scope.loading = false;
       $scope.$apply();
     });
@@ -67,10 +68,15 @@ angular.module('roomApp').controller('roomController', ['$scope', '$http', funct
         return;
       }
 
-      var msg= $scope.username || 'anonymous' + ' left the room!';
+      var msg='';
+      if ($scope.username) {
+        msg= $scope.username + ' left the room of wonder!';
+      } else {
+        msg= 'anonymous left the room of wonder!';
+      }
       $scope.messages.push(msg);
       $scope.username = '';
-      $scope.joined = false;
+      $scope.joinedRoom = false;
       $scope.loading = false;
       $scope.$apply();
     });
@@ -79,7 +85,7 @@ angular.module('roomApp').controller('roomController', ['$scope', '$http', funct
 
   $scope.sendMessage = function() {
 
-    io.socket.post('/room/sendMessage', function(data, jwr){
+    io.socket.put('/room/send-message', function(data, jwr){
 
       if (jwr.statusCode !== 200) {
         console.error(JWR);
